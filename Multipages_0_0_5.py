@@ -228,7 +228,7 @@ def app1():
     st.sidebar.success("已选择：🌍  主监测页面")
 
     # 本地IP地址和端口
-    LOCAL_IP = "51.51.51.16"
+    LOCAL_IP = ""
     LOCAL_PORT = 1438  # 选择一个空闲端口，系统会自动分配
 
     # 服务器IP地址和端口号
