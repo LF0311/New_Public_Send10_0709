@@ -81,8 +81,8 @@ def read_files_split(df):
                   'Audio', 'Audio_VAD', 'Location', 'T', 'E', 'N', 'Id']
     # 删除Location列
     df['Audio'] = df['Audio'].apply(lambda x: x / 100)
-    # df['N'] = df['N'].apply(lambda x: float(x) / 100)
-    # df['E'] = df['E'].apply(lambda x: float(x) / 100)
+    df['N'] = df['N'].apply(lambda x: float(x) / 100)
+    df['E'] = df['E'].apply(lambda x: float(x) / 100)
     df1 = df.drop(['Location'], axis=1)
     return df1
 
