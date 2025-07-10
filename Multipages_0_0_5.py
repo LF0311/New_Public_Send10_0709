@@ -81,8 +81,8 @@ def read_files_split(df):
                   'Audio', 'Audio_VAD', 'Location', 'T', 'E', 'N', 'Id']
     # 删除Location列
     df['Audio'] = df['Audio'].apply(lambda x: x / 100)
-    df['N'] = df['N'].apply(lambda x: float(x) / 100)
-    df['E'] = df['E'].apply(lambda x: float(x) / 100)
+    # df['N'] = df['N'].apply(lambda x: float(x) / 100)
+    # df['E'] = df['E'].apply(lambda x: float(x) / 100)
     df1 = df.drop(['Location'], axis=1)
     return df1
 
@@ -1951,12 +1951,27 @@ def app1():
             for sensID in st.session_state.parameters['unique_ids']:
                 if sensID != 55:
                     trans_data_tmp = {}
+                    tmp_n_send = st.session_state.parameters['sensor_dfs'][sensID]['N'].iloc[0]
+                    tmp_e_send = st.session_state.parameters['sensor_dfs'][sensID]['E'].iloc[0]
+                    gcl_lng_send, hcl_lat_send = wgs84_to_gcj02(float(tmp_n_send[0:3]) + float(tmp_n_send[3:]) / 60,
+                                                      float(tmp_e_send[0:2]) + float(tmp_e_send[2:]) / 60)  # 经纬度
+                    # trans_data_tmp.update(
+                    #     {
+                    #         'CGQID': str(sensID),
+                    #         'JD': st.session_state.parameters['sensor_dfs'][sensID]['N'].iloc[0],
+                    #         'WD': st.session_state.parameters['sensor_dfs'][sensID]['E'].iloc[0],
+                    #         'SBSJ': st.session_state.parameters['sensor_dfs'][sensID]['T'].iloc[0],
+                    #         'SZJSD': list(abs(st.session_state.parameters['sensor_dfs'][sensID]['X_Accel'])),
+                    #         'CTL': list(abs(st.session_state.parameters['sensor_dfs'][sensID]['X_Mag'])),
+                    #         'ZS': list(abs(st.session_state.parameters['sensor_dfs'][sensID]['Audio'])),
+                    #     }
+                    # )
                     trans_data_tmp.update(
                         {
                             'CGQID': str(sensID),
-                            'JD': st.session_state.parameters['sensor_dfs'][sensID]['N'].iloc[0],
-                            'WD': st.session_state.parameters['sensor_dfs'][sensID]['E'].iloc[0],
-                            'SBSJ': st.session_state.parameters['sensor_dfs'][sensID]['T'].iloc[0],
+                            'JD': float(gcl_lng_send),
+                            'WD': float(hcl_lat_send),
+                            'SBSJ': float(st.session_state.parameters['sensor_dfs'][sensID]['T'].iloc[0]),
                             'SZJSD': list(abs(st.session_state.parameters['sensor_dfs'][sensID]['X_Accel'])),
                             'CTL': list(abs(st.session_state.parameters['sensor_dfs'][sensID]['X_Mag'])),
                             'ZS': list(abs(st.session_state.parameters['sensor_dfs'][sensID]['Audio'])),
