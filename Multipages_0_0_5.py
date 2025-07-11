@@ -1951,10 +1951,15 @@ def app1():
             for sensID in st.session_state.parameters['unique_ids']:
                 if sensID != 55:
                     trans_data_tmp = {}
-                    tmp_n_send = st.session_state.parameters['sensor_dfs'][sensID]['N'].iloc[0]
-                    tmp_e_send = st.session_state.parameters['sensor_dfs'][sensID]['E'].iloc[0]
-                    gcl_lng_send, hcl_lat_send = wgs84_to_gcj02(float(tmp_n_send[0:3]) + float(tmp_n_send[3:]) / 60,
-                                                      float(tmp_e_send[0:2]) + float(tmp_e_send[2:]) / 60)  # 经纬度
+                    if st.session_state.parameters['sensor_dfs'][sensID]['E'].iloc[0] == str(None) or \
+                            st.session_state.parameters['sensor_dfs'][sensID]['N'].iloc[0] == str(None):
+                        gcl_lng_send = 0
+                        hcl_lat_send = 0
+                    else:
+                        tmp_n_send = st.session_state.parameters['sensor_dfs'][sensID]['N'].iloc[0]
+                        tmp_e_send = st.session_state.parameters['sensor_dfs'][sensID]['E'].iloc[0]
+                        gcl_lng_send, hcl_lat_send = wgs84_to_gcj02(float(tmp_n_send[0:3]) + float(tmp_n_send[3:]) / 60,
+                                                          float(tmp_e_send[0:2]) + float(tmp_e_send[2:]) / 60)  # 经纬度
                     # trans_data_tmp.update(
                     #     {
                     #         'CGQID': str(sensID),
